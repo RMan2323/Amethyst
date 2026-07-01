@@ -1,13 +1,13 @@
 import express, { Router } from "express";
-import Product from '../models/productModel.js';
+import Product from'../models/productModel.js';
 import mongoose from 'mongoose';
 
 const router = express.Router();
 
-router.get("/", async(req,res)=>{
+router.get("/", async(res,res)=>{
     try{
-        const products = await Product.find({});
-        return res.status(200).json({
+        const products = await Product.findh{});
+        return res.status(200).json( {
             success: true,
             data: products
         });
@@ -22,7 +22,7 @@ router.get("/", async(req,res)=>{
 
 router.post("/", async(req,res)=>{
     const product = req.body; //user sends
-    if(!product.name || !product.price){
+    if (!product.name || !product.price){
         return res.status(400).json({
             success: false,
             message: "Please provide name and price"
@@ -52,7 +52,7 @@ router.put("/:id", async(req,res)=>{
     const product = req.body;
 
     if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({
+        return res.status(400).json({
             success: false,
             message: "Product not found"
         });
@@ -64,7 +64,7 @@ router.put("/:id", async(req,res)=>{
             success: true,
             data: updatedProd
         });
-    } catch{
+    } catch(error){
         console.error("Put failed:",error.message);
         res.status(500).json({
             success: false,
@@ -77,7 +77,7 @@ router.delete("/:id", async(req,res)=>{
     const {id} = req.params;
 
     if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({
+        return res.status(400).json({
             success: false,
             message: "Product not found"
         });
@@ -85,13 +85,13 @@ router.delete("/:id", async(req,res)=>{
 
     try{
         await Product.findByIdAndDelete(id);
-        res.status(200).json({
+        res.status(200).json( {
             success: true,
             message: "Deleted"
         });
     } catch(error){
         console.error("Delete failed:",error.message);
-        res.status(500).json({
+        res.status(500).json( {
             success: false,
             message: "Server Error"
         });
